@@ -15,7 +15,8 @@ flags = [
 '-D_GNU_SOURCE',
 
 # architecture to use in jitr
-'-DJITR_ARCH=amd64',
+'-m32',
+'-D JITR_ARCH=i386',
 
 # intel syntax
 ]

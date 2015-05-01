@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,7 +19,17 @@ typedef unsigned char bool;
 #error JITR_ARCH must be defined
 #endif
 
+#if JITR_ARCH == i386
+#include "jitr-i386.h"
+#elif JITR_ARCH == amd64
+// jitr-amd64.h
+#elif JITR_ARCH == arm
+// jitr-arm.h
+#endif
 
+#define JITR_PTR_SIZE       (sizeof(void*))
+#define JITR_ASM(s)         __asm__ __volatile__ (JITR_MARK s JITR_MARK)
+typedef void(*jitr_raw)(void);
 
 #ifdef __cplusplus
 }
