@@ -1,0 +1,9 @@
+# jitr git ignore
+
+# Project
+*.pyc
+
+# Source
+*.o
+*.out
+*.a
