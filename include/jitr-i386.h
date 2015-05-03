@@ -1,9 +1,19 @@
 #ifndef JITR_I386_H_
 #define JITR_I386_H_
 
+// jitr platform-specific integer types
+typedef int jitr_int;
+typedef unsigned int jitr_uint;
+
 // jitr mark
 const char JITR_MARK_SEQ[] = {0x90, 0x90};
 #define JITR_MARK       "nop; nop\n\t"
+
+// jitr args
+#define JITR_ARG1       0x54FF3201
+#define JITR_ARG2       0x54FF3202
+const unsigned int JITR_ARG1_SEQ = JITR_ARG1;
+const unsigned int JITR_ARG2_SEQ = JITR_ARG2;
 
 // jitr registers
 #define R_ACCUM         "%eax"

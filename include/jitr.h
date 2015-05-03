@@ -29,7 +29,18 @@ typedef unsigned char bool;
 
 #define JITR_PTR_SIZE       (sizeof(void*))
 #define JITR_ASM(s)         __asm__ __volatile__ (JITR_MARK s JITR_MARK)
-typedef void(*jitr_raw)(void);
+
+typedef void (*jitr_asm)(void);
+typedef void* (*jitr_func)(int n, ...);
+typedef char *jitr_native;
+
+typedef struct {
+    jitr_native code;
+    unsigned int length;
+    void **arg1;
+    void **arg2;
+    unsigned char *index;
+} jitr_code;
 
 #ifdef __cplusplus
 }
