@@ -1,66 +1,24 @@
-#include "jitr.h"
+#include "operations.h"
 
-static void op_add_one_accum() {
-    JITR_ASM(JITR_ADD(JITR_VAL(0x1), R_ACCUM));
+void jitr_batch_init(jitr_batch *batch) {
+    batch->native = (jitr_native)malloc(32);
+    batch->cap = 32;
+    batch->length = 0;
 }
 
-static void op_pop_into_accum() {
-    JITR_ASM(JITR_POP(R_ACCUM));
+void jitr_batch_destroy(jitr_batch *batch) {
+    free(batch->native);
 }
 
-static void op_ret() {
-    JITR_ASM(JITR_RET());
+void jitr_batch_call(jitr_batch *batch, void *func) {
+    jitr_code call_op;
+    jitr_scan(&call_op, &op_call);
+    jitr_uint *funcptr = jitr_parseInt(&call_op, 0x00FF00FF, 0);
+    *funcptr = (jitr_uint)func;
 }
 
-static void op_call() {
-    JITR_ASM(
-            JITR_INC(R_ACCUM)
-            JITR_DEC(R_ACCUM)
-            JITR_DEC(R_ACCUM)
-            );
-}
+void jitr_batch_prepare(jitr_batch *batch);
+void jitr_batch_finalize(jitr_batch *batch);
 
-static char* jitr_getChunk(jitr_raw raw) {
-    const char *end_bytes = JITR_MARK_SEQ;
-    int last_index = sizeof(JITR_MARK_SEQ) + 1;
-
-    int len = 0;
-    char *cur = (char*)raw;
-    char first = end_bytes[0];
-    bool flag = false;
-    int cmpindex = 0;
-    for (; ; len++) {
-        if (flag) {
-            if (*cur == end_bytes[cmpindex++]) {
-                if (cmpindex == last_index)
-                    break;
-            }
-            else {
-                if (*cur == first) {
-                    cmpindex = 1;
-                    continue;
-                }
-                flag = false;
-            }
-        }
-        else {
-            if (*cur == first) {
-                cmpindex = 1;
-                flag = true;
-            }
-        }
-        cur++;
-    }
-
-    len -= (last_index - 2);
-    char *native = (char*)malloc(len);
-    memcpy(native, raw, len);
-    return native;
-}
-
-int main() {
-    char *native = jitr_getChunk(op_pop_into_accum);
-
-    return 0;
-}
+jitr_func jitr_compile(jitr_batch *batch);
 

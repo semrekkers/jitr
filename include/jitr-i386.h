@@ -1,36 +1,38 @@
 #ifndef JITR_I386_H_
 #define JITR_I386_H_
 
-// jitr platform-specific integer types
+// jitr platform-specific types
+typedef unsigned char jitr_uchar;
 typedef int jitr_int;
 typedef unsigned int jitr_uint;
+typedef void *jitr_ptr;
 
 // jitr mark
-const char JITR_MARK_SEQ[] = {0x90, 0x90};
+const jitr_uchar JITR_MARK_SEQ[] = {0x90, 0x90};
 #define JITR_MARK       "nop; nop\n\t"
 
-// jitr args
-#define JITR_ARG1       0x54FF3201
-#define JITR_ARG2       0x54FF3202
-const unsigned int JITR_ARG1_SEQ = JITR_ARG1;
-const unsigned int JITR_ARG2_SEQ = JITR_ARG2;
-
 // jitr registers
-#define R_ACCUM         "%eax"
-#define R_BASE          "%ebx"
-#define R_COUNT         "%ecx"
-#define R_DATA          "%edx"
-#define R_INDEX         "%esi"
-#define R_PTR           "%edi"
+#define JITR_R1         "%eax"
+#define JITR_R2         "%ebx"
+#define JITR_R3         "%ecx"
+#define JITR_R4         "%edx"
+
+// jitr stack and base pointer
+#define JITR_STACK      "%esp"
+#define JITR_BASE       "%ebp"
+
+// jitr "mask" value
+jitr_uint jitr_mask = 0x00FFFF32;
 
 // jitr value
 #define JITR_VAL(val)   "$"#val
+#define JITR_DEREF(val) "("val")"
 
 // operations
-#define JITR_MOVE(src, dest)        "mov "src", "dest"\n\t"
+#define JITR_MOV(src, dest)         "mov "src", "dest"\n\t"
 #define JITR_PUSH(src)              "push "src"\n\t"
 #define JITR_POP(src)               "pop "src"\n\t"
-#define JITR_ADDR(src, dest)        "lea "src", "dest"\n\t"
+#define JITR_LEA(src, dest)         "lea "src", "dest"\n\t"
 #define JITR_ADD(src, dest)         "add "src", "dest"\n\t"
 #define JITR_SUB(src, dest)         "sub "src", "dest"\n\t"
 #define JITR_INC(src)               "inc "src"\n\t"
@@ -54,6 +56,7 @@ const unsigned int JITR_ARG2_SEQ = JITR_ARG2;
 #define JITR_JLE(src)               "jle "src"\n\t"
 #define JITR_CMP(src, dest)         "cmp "src", "dest"\n\t"
 #define JITR_CALL(src)              "call "src"\n\t"
+#define JITR_CALL_REG(src)          "call *"src"\n\t"
 #define JITR_RET()                  "ret\n\t"
 
 #endif // JITR_I386_H_
