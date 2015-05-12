@@ -9,7 +9,7 @@ flags = [
 'c',
 
 '-I',
-'./src',
+'/usr/include',
 '-I',
 './include',
 '-D_GNU_SOURCE',
@@ -17,8 +17,6 @@ flags = [
 # architecture to use in jitr
 '-m32',
 '-D JITR_ARCH=i386',
-
-# intel syntax
 ]
 
 compilation_database_folder = ''
